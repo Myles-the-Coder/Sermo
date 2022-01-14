@@ -13,8 +13,19 @@ import {
 export default function Start({ navigation }) {
 	const [name, setName] = useState('');
 	const [bgColor, setBgColor] = useState('');
-	const { outerContainer, innerContainer, textInput, text, colorList, colorCircle, img } =
-		style;
+	const {
+		outerContainer,
+		innerContainer,
+		textInput,
+		text,
+		colorList,
+		colorCircle,
+		img,
+		blackBackground,
+		lighterBackground,
+		grayBackground,
+		lightBlueBackground,
+	} = style;
 
 	return (
 		<View style={outerContainer}>
@@ -38,28 +49,38 @@ export default function Start({ navigation }) {
 					<Text style={text}>Choose Background Color: </Text>
 					<View style={colorList}>
 						<TouchableOpacity
-							onPress={() => setBgColor(style.blackBackground.backgroundColor)}>
-							<View style={[colorCircle, style.blackBackground]}></View>
+              accessible={true}
+              accessibilityLabel='Black button'
+              accessibilityHint='Lets you choose black as your background color'
+              accessibilityRole='button'
+							onPress={() => setBgColor(blackBackground.backgroundColor)}>
+							<View style={[colorCircle, blackBackground]}></View>
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() =>
-								setBgColor(style.lighterBackground.backgroundColor)
-							}>
-							<View style={[colorCircle, style.lighterBackground]}></View>
+             accessible={true}
+             accessibilityLabel='Light black button'
+             accessibilityHint='Lets you choose light black as your background color'
+             accessibilityRole='button'
+							onPress={() => setBgColor(lighterBackground.backgroundColor)}>
+							<View style={[colorCircle, lighterBackground]}></View>
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => setBgColor(style.grayBackground.backgroundColor)}>
-							<View style={[colorCircle, style.grayBackground]}></View>
+             accessible={true}
+             accessibilityLabel='Gray button'
+             accessibilityHint='Lets you choose gray as your background color'
+             accessibilityRole='button'
+							onPress={() => setBgColor(grayBackground.backgroundColor)}>
+							<View style={[colorCircle, grayBackground]}></View>
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() =>
-								setBgColor(style.lightBlueBackground.backgroundColor)
-							}>
-							<View
-								style={[colorCircle, style.lightBlueBackground]}></View>
+             accessible={true}
+             accessibilityLabel='Light blue button'
+             accessibilityHint='Lets you choose light blue as your background color'
+             accessibilityRole='button'
+							onPress={() => setBgColor(lightBlueBackground.backgroundColor)}>
+							<View style={[colorCircle, lightBlueBackground]}></View>
 						</TouchableOpacity>
 					</View>
-					<Text>Your color is: {bgColor}</Text>
 					<Button
 						title='Start Conversation'
 						onPress={() => navigation.navigate('Chat', { name, bgColor })}
