@@ -1,4 +1,3 @@
-// import {StyleSheet } from 'react-native';
 import Start from './components/Start'
 import Chat from './components/Chat'
 import 'react-native-gesture-handler'
@@ -18,12 +17,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'lightblue',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
