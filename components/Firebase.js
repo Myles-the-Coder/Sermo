@@ -10,6 +10,7 @@ import {
 	APP_ID,
 	MEASUREMENT_ID,
 } from '@env';
+import { getStorage } from 'firebase/storage';
 const firebaseConfig = {
 	apiKey: API_KEY,
 	authDomain: AUTH_DOMAIN,
@@ -24,3 +25,4 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getFirestore();
+export const storage = getStorage()

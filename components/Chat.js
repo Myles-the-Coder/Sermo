@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Platform, KeyboardAvoidingView, Text } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, LogBox} from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
+import ConnectedActions from './CustomActions';
+import MapView from 'react-native-maps';
 import {
 	collection,
 	onSnapshot,
-	where,
 	query,
 	orderBy,
 	addDoc,
@@ -13,6 +14,8 @@ import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { auth, db } from './Firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+
+LogBox.ignoreAllLogs()
 
 export default function Chat({ route, navigation }) {
 	const [messages, setMessages] = useState([]);
@@ -37,29 +40,20 @@ export default function Chat({ route, navigation }) {
 		}
 	};
 
-	const deleteMessages = async () => {
-		try {
-			await AsyncStorage.removeItem('messages');
-			setMessages([]);
-		} catch (error) {
-			alert(error);
-		}
-	};
-
 	useEffect(() => {
-		navigation.setOptions({ title: name });
-		NetInfo.fetch().then(connection => {
+		navigation.setOptions({ title: name ? name : 'User' });
+		NetInfo.fetch().then(async connection => {
 			if (connection.isConnected === false) {
 				setConnection(false);
 				getMessages();
 			} else {
 				onAuthStateChanged(auth, async user => {
-					if (!user) await signInAnonymously(auth);
+					!user && (await signInAnonymously(auth));
 					setUser(user);
 					setMessages([]);
 					setConnection(true);
 				});
-        saveMessages();
+				saveMessages();
 
 				const collectionRef = collection(db, 'messages');
 				const q = query(collectionRef, orderBy('createdAt', 'desc'));
@@ -76,8 +70,10 @@ export default function Chat({ route, navigation }) {
 			querySnapshot.docs.map(doc => ({
 				_id: doc.data()._id,
 				createdAt: doc.data().createdAt.toDate(),
-				text: doc.data().text,
+				text: doc.data().text || '',
 				user: doc.data().user,
+				image: doc.data().image || null,
+				location: doc.data().location || null,
 			}))
 		);
 	};
@@ -99,48 +95,69 @@ export default function Chat({ route, navigation }) {
 	};
 
 	const renderInputToolbar = props => {
-		if (connection === false) {
-		} else {
-			return <InputToolbar {...props} />;
-		}
-	};
-
-	const addMessage = () => {
-		const { _id, createdAt, text, user} = messages[0];
-		addDoc(collection(db, 'messages'), {
-			_id,
-			createdAt,
-			text,
-			user,
-		});
+		return connection ? <InputToolbar {...props}/> : null
 	};
 
 	const onSend = useCallback((messages = []) => {
 		setMessages(prevMessages => GiftedChat.append(prevMessages, messages));
-		addMessage();
+    const { _id, createdAt, text, user, image, location } = messages[0];
+		addDoc(collection(db, 'messages'), {
+			_id,
+			text: text || '',
+			createdAt,
+			user,
+			image: image || null,
+			location: location || null,
+		});
 		saveMessages();
 	}, []);
 
+	const renderCustomActions = props => {
+		return <ConnectedActions {...props} />;
+	};
+
+	const renderCustomView = props => {
+		const { currentMessage } = props;
+		if (currentMessage.location) {
+			const { latitude, longitude } = currentMessage.location;
+			return (
+				<MapView
+					style={{ width: 225, height: 175, margin: 7}}
+					region={{
+						latitude,
+						longitude,
+						latitudeDelta: 0.0922,
+						longitudeDelta: 0.0421,
+					}}
+				/>
+			);
+		}
+		return null;
+	};
+
+  const fixKeyboardView = () => {
+    return Platform.OS === 'android' ? (
+      <KeyboardAvoidingView behavior='height' />
+    ) : null
+  }
+
 	return (
 		<View style={{ flex: 1, backgroundColor: bgColor }}>
-			<Text style={{ color: '#fff', fontSize: 30, textAlign: 'center' }}>
-				Connection is: {connection.toString()}
-			</Text>
 			<GiftedChat
 				renderInputToolbar={renderInputToolbar}
 				renderBubble={renderBubble}
+				renderActions={renderCustomActions}
+				renderCustomView={renderCustomView}
 				showAvatarForEveryMessage={true}
 				messages={messages}
 				onSend={messages => onSend(messages)}
 				user={{
 					_id: user.uid,
 					name: user.displayName,
-					avatar: 'https://placeimg.com/140/140/any',
+					avatar: user.photoURL || 'https://placeimg.com/140/140/any',
 				}}
 			/>
-			{Platform.OS === 'android' ? (
-				<KeyboardAvoidingView behavior='height' />
-			) : null}
+			{fixKeyboardView}
 		</View>
 	);
 }
