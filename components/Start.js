@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
 	View,
 	Text,
-	Button,
 	TextInput,
 	Image,
 	StyleSheet,
@@ -23,6 +22,7 @@ export default function Start({ navigation }) {
 		button,
 		bgBtn,
 		chatBtn,
+    btnText
 	} = style;
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function Start({ navigation }) {
 							navigation.navigate('ColorWheel', { bgColor, setBgColor })
 						}>
 						<Text
-							style={{ color: 'whitesmoke', fontSize: 15, fontWeight: 'bold' }}>
+							style={btnText}>
 							Choose Background Color
 						</Text>
 					</TouchableOpacity>
@@ -76,7 +76,7 @@ export default function Start({ navigation }) {
 						style={[button, chatBtn]}
 						onPress={() => navigation.navigate('Chat', { name, bgColor })}>
 						<Text
-							style={{ color: 'whitesmoke', fontSize: 15, fontWeight: 'bold' }}>
+							style={btnText}>
 							Enter Chat
 						</Text>
 					</TouchableOpacity>
@@ -125,4 +125,7 @@ const style = StyleSheet.create({
 	chatBtn: {
 		backgroundColor: 'skyblue',
 	},
+  btnText: {
+    color: 'whitesmoke', fontSize: 15, fontWeight: 'bold'
+  }
 });
