@@ -11,7 +11,7 @@ Initial 1.0 Version Duration: December 2021 - January 2022
  
 ## 🧐About
 
-This project was built for the purpose of gaining more expiernce with mobile development via React Native. 
+This project was built for the purpose of gaining more experience with mobile development via React Native. 
 
 ## 💡Features
 
@@ -22,6 +22,10 @@ This project was built for the purpose of gaining more expiernce with mobile dev
 5. Quick location sharing
 
 ## ⛏️Built with
+
+- React Native
+- Expo
+- Firebase
 
  "dependencies": {
  
@@ -83,24 +87,14 @@ These instructions will help you to setup your own copy of Sermo on your local m
 ## 🧰Installation
 
 1. Clone this repo
-2. Install all the dependencies listed above
+2. Install all the dependencies listed above using ```npm install```
 3. Tweak code depending on local settings
 4. Run ```npm start``` or ```expo start``` in your terminal to start local server
 5. Scan the QR code provided by Expo in the terminal or development tools to load the project on a physical device. Alternatively, launch the project using an Android Studio or Xcode.
 
 
-## 🚀Firebase Setup (As of Jan 2022)
-
-1. Create a new project through the Firebase console
-2. Click on Firebase Database on the lefthand side of the page, enter production mode, and select the closest Cloud Firestore location
-3. Click on the cog icon next to 'Project Overview' and scroll down to the 'Your Apps' section at the bottom of the page. 
-4. Click on the 'web' icon and enter the project name on the next page.
-5. Add the Firebase congif settings to either your `Chat.js` file or a seperate file where it can be imported
-   - Do NOT push these settings to GitHub. Make use of `react-native-dotenv` or a similar package to hide these in a `.env` file.
-6. Enable anonymous signin within the 'Authentication' menu
-7. Enable storge in the 'Storage' menu. This is used to store image files set as chat messages.
-
-For further information, please refer to the [Firebase Docs](https://firebase.google.com/docs/)
+## 🚀Firebase Setup 
+Please refer to the [Firebase Docs](https://firebase.google.com/docs/)
 
 ## 📝Todo
 
