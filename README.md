@@ -1,3 +1,5 @@
+<div align='center'>
+
 # Sermo
 ![Sermo_Logo - Copy](https://user-images.githubusercontent.com/76969330/152239441-96a85da1-d3fd-4063-8812-39463ad2ba35.png)
 
@@ -5,6 +7,8 @@ Sermo is a mobile chat application built using React Native, Expo, Gifted Chat, 
 
 Initial 1.0 Version Duration: December 2021 - January 2022
 
+</div>
+ 
 ## 🧐About
 
 This project was built for the purpose of gaining more expiernce with mobile development via React Native. 
