@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Platform, KeyboardAvoidingView, LogBox} from 'react-native';
+import { View, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import ConnectedActions from './CustomActions';
 import MapView from 'react-native-maps';
@@ -15,7 +15,7 @@ import { auth, db } from './Firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-LogBox.ignoreAllLogs()
+LogBox.ignoreAllLogs();
 
 export default function Chat({ route, navigation }) {
 	const [messages, setMessages] = useState([]);
@@ -27,16 +27,16 @@ export default function Chat({ route, navigation }) {
 		try {
 			let messages = await AsyncStorage.getItem('messages');
 			setMessages(messages !== null ? JSON.parse(messages) : []);
-		} catch (error) {
-			alert(error);
+		} catch (err) {
+			alert(err);
 		}
 	};
 
 	const saveMessages = async () => {
 		try {
 			await AsyncStorage.setItem('messages', JSON.stringify(messages));
-		} catch (error) {
-			alert(error);
+		} catch (err) {
+			alert(err);
 		}
 	};
 
@@ -95,12 +95,12 @@ export default function Chat({ route, navigation }) {
 	};
 
 	const renderInputToolbar = props => {
-		return connection ? <InputToolbar {...props}/> : null
+		return connection ? <InputToolbar {...props} /> : null;
 	};
 
 	const onSend = useCallback((messages = []) => {
 		setMessages(prevMessages => GiftedChat.append(prevMessages, messages));
-    const { _id, createdAt, text, user, image, location } = messages[0];
+		const { _id, createdAt, text, user, image, location } = messages[0];
 		addDoc(collection(db, 'messages'), {
 			_id,
 			text: text || '',
@@ -112,17 +112,15 @@ export default function Chat({ route, navigation }) {
 		saveMessages();
 	}, []);
 
-	const renderCustomActions = props => {
-		return <ConnectedActions {...props} />;
-	};
+	const renderCustomActions = props => <ConnectedActions {...props} />;;
 
-	const renderCustomView = props => {
-		const { currentMessage } = props;
-		if (currentMessage.location) {
-			const { latitude, longitude } = currentMessage.location;
+	const renderCustomView = ({currentMessage}) => {
+    const {location} = currentMessage
+		if (location) {
+			const { latitude, longitude } = location;
 			return (
 				<MapView
-					style={{ width: 225, height: 175, margin: 7}}
+					style={{ width: 225, height: 175, margin: 7 }}
 					region={{
 						latitude,
 						longitude,
@@ -135,11 +133,11 @@ export default function Chat({ route, navigation }) {
 		return null;
 	};
 
-  const fixKeyboardView = () => {
-    return Platform.OS === 'android' ? (
-      <KeyboardAvoidingView behavior='height' />
-    ) : null
-  }
+	const fixKeyboardView = () => {
+		return Platform.OS === 'android' ? (
+			<KeyboardAvoidingView behavior='height' />
+		) : null;
+	};
 
 	return (
 		<View style={{ flex: 1, backgroundColor: bgColor }}>

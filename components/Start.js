@@ -31,9 +31,7 @@ export default function Start({ navigation }) {
   
 
 	const greetingMessage = () => {
-		const today = new Date();
-		const currentHour = today.getHours();
-
+		const currentHour = new Date().getHours();
 		setGreeting(
 			currentHour < 12
 				? 'Good Morning'
