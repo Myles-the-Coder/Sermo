@@ -46,7 +46,7 @@ export default function Chat({ route, navigation }) {
 			if (connection.isConnected === false) {
 				setConnection(false);
 				getMessages();
-			} else {
+			} else { 
 				onAuthStateChanged(auth, async user => {
 					!user && (await signInAnonymously(auth));
 					setUser(user);
@@ -57,24 +57,26 @@ export default function Chat({ route, navigation }) {
 
 				const collectionRef = collection(db, 'messages');
 				const q = query(collectionRef, orderBy('createdAt', 'desc'));
-				const unsubscribe = onSnapshot(q, querySnapshot =>
+				return onSnapshot(q, querySnapshot =>
 					onCollectionUpdate(querySnapshot)
 				);
-				return unsubscribe;
 			}
 		});
 	}, []);
 
-	const onCollectionUpdate = querySnapshot => {
+	const onCollectionUpdate = ({ docs }) => {
 		setMessages(
-			querySnapshot.docs.map(doc => ({
-				_id: doc.data()._id,
-				createdAt: doc.data().createdAt.toDate(),
-				text: doc.data().text || '',
-				user: doc.data().user,
-				image: doc.data().image || null,
-				location: doc.data().location || null,
-			}))
+			docs.map(doc => {
+				const { _id, createdAt, text, user, image, location } = doc.data();
+				return {
+					_id,
+					createdAt: createdAt.toDate(),
+					text: text || '',
+					user,
+					image: image || null,
+					location: location || null,
+				};
+			})
 		);
 	};
 
@@ -83,12 +85,8 @@ export default function Chat({ route, navigation }) {
 			<Bubble
 				{...props}
 				wrapperStyle={{
-					right: {
-						backgroundColor: '#00bfff',
-					},
-					left: {
-						backgroundColor: 'lightgray',
-					},
+					right: { backgroundColor: '#00bfff' },
+					left: { backgroundColor: 'lightgray' },
 				}}
 			/>
 		);
@@ -112,10 +110,10 @@ export default function Chat({ route, navigation }) {
 		saveMessages();
 	}, []);
 
-	const renderCustomActions = props => <ConnectedActions {...props} />;;
+	const renderCustomActions = props => <ConnectedActions {...props} />;
 
-	const renderCustomView = ({currentMessage}) => {
-    const {location} = currentMessage
+	const renderCustomView = ({ currentMessage }) => {
+		const { location } = currentMessage;
 		if (location) {
 			const { latitude, longitude } = location;
 			return (
