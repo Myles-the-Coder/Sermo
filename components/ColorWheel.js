@@ -1,5 +1,5 @@
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, LogBox } from 'react-native';
-import React, {useEffect } from 'react';
 import ColorPicker from 'react-native-wheel-color-picker';
 import { useState } from 'react';
 
@@ -11,14 +11,14 @@ export default function ColorWheel({ route, navigation }) {
 	useEffect(() => navigation.setOptions({ title: 'Color Wheel' }), []);
 
 	const { setBgColor } = route.params;
-	const [color, setColor] = useState('');
+	const [currentColor, setCurrentColor] = useState('');
 	return (
 		<View style={styles.container}>
 			<Text style={{ fontSize: 26, textAlign: 'center' }}>
-				Current background color is: {color}
+				Current background color is: {currentColor}
 			</Text>
 			<View
-				style={{ backgroundColor: color, width: '100%', height: 100 }}></View>
+				style={{ backgroundColor: currentColor, width: '100%', height: 100 }}></View>
 			<ColorPicker
 				thumbSize={40}
 				sliderSize={40}
@@ -26,7 +26,7 @@ export default function ColorWheel({ route, navigation }) {
 				row={false}
 				onColorChange={color => {
 					setBgColor(color);
-					setColor(color);
+					setCurrentColor(color);
 				}}
 			/>
 		</View>

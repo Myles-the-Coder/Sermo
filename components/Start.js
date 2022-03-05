@@ -63,7 +63,7 @@ export default function Start({ navigation }) {
 					<TouchableOpacity
 						style={[button, bgBtn]}
 						onPress={() =>
-							navigation.navigate('ColorWheel', { bgColor, setBgColor })
+							navigation.navigate('ColorWheel', { setBgColor })
 						}>
 						<Text
 							style={btnText}>
